@@ -9,7 +9,7 @@ if params.len > 1:
   echo "Usage: vrc_shot_folder 12:00"
   quit(1)
 let sepTime =
-  parseTime(
+  parse(
     if params.len == 1:
       params[0]
     else:
@@ -17,6 +17,9 @@ let sepTime =
     "HH:mm",
     local()
   )
+
+proc timeTick(datetime: DateTime): int64 =
+  datetime.hour * 3600 + datetime.minute * 60 + datetime.second
 
 var dirs: seq[string] = @[]
 type SrcDst = tuple
@@ -29,7 +32,7 @@ for file in walkDir(vrchatPictureDir):
     let matched = file.path.find(timeRe)
     if matched.isSome:
       var datetime = parse(matched.get.match, "yyyy-MM-dd'_'HH-mm-ss'.'fff'.png'", local())
-      if datetime.toTime < sepTime:
+      if datetime.timeTick < sepTime.timeTick:
         datetime -= 1.days
       let useDate = datetime.format("yyyy-MM-dd")
       let dirPath = vrchatPictureDir / useDate
