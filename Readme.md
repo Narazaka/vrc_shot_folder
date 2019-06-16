@@ -2,6 +2,8 @@
 
 VRChatのスクリーンショットフォルダにある画像を日付別フォルダに入れるコマンド
 
+vrc_shot_folder_time.batをダブルクリックすると分類されます。
+
 **[ダウンロード](https://github.com/Narazaka/vrc_shot_folder/releases)**
 
 日付変更線が指定できます。デフォルトは昼の12:00です。
