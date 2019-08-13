@@ -28,7 +28,7 @@ type SrcDst = tuple
 var files: seq[SrcDst] = @[]
 
 for file in walkDir(vrchatPictureDir):
-  if file.kind == pcFile:
+  if file.kind == pcFile or file.kind == pcLinkToFile:
     let matched = file.path.find(timeRe)
     if matched.isSome:
       var datetime = parse(matched.get.match, "yyyy-MM-dd'_'HH-mm-ss'.'fff'.png'", local())
