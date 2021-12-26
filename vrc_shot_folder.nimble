@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.3.0"
+version       = "0.4.0"
 author        = "Narazaka"
 description   = "VRChat Screenshot folder utility"
 license       = "Zlib"
@@ -10,4 +10,5 @@ bin           = @["vrc_shot_folder"]
 
 # Dependencies
 
-requires "nim >= 0.19.4"
+requires "nim >= 1.6.2"
+requires "cligen >= 1.5.19"
