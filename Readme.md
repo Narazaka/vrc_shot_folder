@@ -42,6 +42,12 @@ VRChatのスクリーンショットフォルダにある画像を日付別フ�
 @vrc_shot_folder.exe --verbose --separateBy date --separateTime 12:00 --directory "C:\Users\narazaka\OneDrive\Pictures\VRChat"
 ```
 
+## 空のフォルダを消す
+
+`vrc_shot_folder_time.bat`をメモ帳か何かで編集してください。
+
+`--deleteEmptyDirectory`を付けて下さい。
+
 ## License
 
 [Zlib License](https://narazaka.net/license/Zlib?2019)

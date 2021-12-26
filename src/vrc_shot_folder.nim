@@ -1,6 +1,6 @@
 import os, times, nre, cligen, system
 
-let moduleVersion = "0.4.0"
+let moduleVersion = "0.5.0"
 
 let vrchatPictureDir = getHomeDir() / "Pictures" / "VRChat"
 
@@ -103,7 +103,7 @@ proc removeEmptyDirectories(emptyDirs: seq[string], log=false) =
       if log:
         echo "remove ", dir
 
-proc main(directory=vrchatPictureDir, separateBy=date, version=false, verbose=false, stayEmptyDirectory=false, dryRun=false, separateTime="12:00") =
+proc main(directory=vrchatPictureDir, separateBy=date, version=false, verbose=false, deleteEmptyDirectory=false, dryRun=false, separateTime="12:00") =
   if version:
     echo moduleVersion
     return
@@ -113,14 +113,14 @@ proc main(directory=vrchatPictureDir, separateBy=date, version=false, verbose=fa
     if verbose:
       for file in files:
         logMoveFile(file)
-      if not stayEmptyDirectory:
+      if deleteEmptyDirectory:
         let emptyDirs = detectEmptyDirectories(files, extraFiles)
         for dir in emptyDirs:
           echo "remove ", dir
   else:
     makeDirs(dirs)
     moveFiles(files, verbose)
-    if not stayEmptyDirectory:
+    if deleteEmptyDirectory:
       let emptyDirs = detectEmptyDirectories(files, extraFiles)
       removeEmptyDirectories(emptyDirs, verbose)
   echo files.len, " files moved"
@@ -130,7 +130,7 @@ if isMainModule:
     "separateTime": "\"beginning of day\", in HH:mm format",
     "separateBy": "date / month / date_in_month",
     "dryRun": "do not move files, just print what would be done",
-    "stayEmptyDirectory": "do not delete empty directories",
+    "deleteEmptyDirectory": "delete empty directories",
   }, short={
     "separateTime": 't',
   })
