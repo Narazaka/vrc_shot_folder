@@ -2,7 +2,7 @@
 
 VRChatのスクリーンショットフォルダにある画像を日付別フォルダに入れるコマンド
 
-vrc_shot_folder_time.batをダブルクリックすると分類されます。
+`vrc_shot_folder_time.bat`をダブルクリックすると分類されます。
 
 **[ダウンロード](https://github.com/Narazaka/vrc_shot_folder/releases)**
 
