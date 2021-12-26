@@ -6,6 +6,18 @@ vrc_shot_folder_time.batをダブルクリックすると分類されます。
 
 **[ダウンロード](https://github.com/Narazaka/vrc_shot_folder/releases)**
 
+## フォルダ分け
+
+`vrc_shot_folder_time.bat`をメモ帳か何かで編集してください。
+
+|`vrc_shot_folder_time.bat`の2行目|フォルダ分け|
+|--|--|
+|`@vrc_shot_folder.exe --verbose --separateBy date --separateTime 12:00`|`2021-12-24`|
+|`@vrc_shot_folder.exe --verbose --separateBy month --separateTime 12:00`|`2021-12`|
+|`@vrc_shot_folder.exe --verbose --separateBy date_in_month --separateTime 12:00`|`2021-12/2021-12-24`|
+
+## 日付変更線
+
 日付変更線が指定できます。デフォルトは昼の12:00です。
 
 |撮影日付|フォルダ|
@@ -16,7 +28,7 @@ vrc_shot_folder_time.batをダブルクリックすると分類されます。
 
 みたいな感じになります。深夜勢でも日付がまとまって安心。
 
-日付変更線を変えたい場合は付属の`vrc_shot_folder_time.bat`をメモ帳か何かで編集してそっちを実行してください。
+`vrc_shot_folder_time.bat`をメモ帳か何かで編集してください。
 
 ## License
 
