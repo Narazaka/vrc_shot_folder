@@ -30,6 +30,18 @@ VRChatのスクリーンショットフォルダにある画像を日付別フ�
 
 `vrc_shot_folder_time.bat`をメモ帳か何かで編集してください。
 
+## 見るフォルダ
+
+デフォルトでは`Pictures/VRChat`フォルダを見ますが、OneDriveにしたり、その他の変更によってフォルダが変わった場合はオプションに指定して下さい。
+
+`vrc_shot_folder_time.bat`をメモ帳か何かで編集してください。
+
+例:
+
+```
+@vrc_shot_folder.exe --verbose --separateBy date --separateTime 12:00 --directory "C:\Users\narazaka\OneDrive\Pictures\VRChat"
+```
+
 ## License
 
 [Zlib License](https://narazaka.net/license/Zlib?2019)
