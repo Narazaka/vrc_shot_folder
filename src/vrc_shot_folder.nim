@@ -26,10 +26,12 @@ type SrcDst = tuple
 type Destinations = tuple
       dirs: seq[string]
       files: seq[SrcDst]
+      extraFiles: seq[string]
 
 proc detectDestinations(directory: string, separateBy: SeparateBy, sepTime: DateTime): Destinations =
   var dirs: seq[string] = @[]
   var files: seq[SrcDst] = @[]
+  var extraFiles: seq[string] = @[]
 
   for file in walkDirRec(directory, { pcFile, pcLinkToFile }, { pcDir, pcLinkToDir }):
     let matched = file.find(timeRe)
@@ -55,8 +57,10 @@ proc detectDestinations(directory: string, separateBy: SeparateBy, sepTime: Date
         if not dirs.contains(dirPath):
           dirs.add(dirPath)
         files.add((src: file, dst: dst))
+    else:
+      extraFiles.add(file)
 
-  (dirs, files)
+  (dirs, files, extraFiles)
 
 proc logMoveFile(file: SrcDst) =
   echo file.src, " -> ", file.dst
@@ -71,19 +75,54 @@ proc moveFiles(files: seq[SrcDst], log=false) =
     if log:
       logMoveFile(file)
 
-proc main(directory=vrchatPictureDir, separateBy=date, version=false, verbose=false, dryRun=false, separateTime="12:00") =
+proc detectEmptyDirectories(files: seq[SrcDst], extraFiles: seq[string]): seq[string] =
+  var dirs: seq[string] = @[]
+  var stayDirs: seq[string] = @[]
+  var emptyDirs: seq[string] = @[]
+  for file in files:
+    for dir in parentDirs(file.src, inclusive=false):
+      if not dirs.contains(dir):
+        dirs.add(dir)
+  for file in files:
+    for dir in parentDirs(file.dst, inclusive=false):
+      if not stayDirs.contains(dir):
+        stayDirs.add(dir)
+  for file in extraFiles:
+    for dir in parentDirs(file, inclusive=false):
+      if not stayDirs.contains(dir):
+        stayDirs.add(dir)
+  for dir in dirs:
+    if not stayDirs.contains(dir):
+      emptyDirs.add(dir)
+  emptyDirs
+
+proc removeEmptyDirectories(emptyDirs: seq[string], log=false) =
+  for dir in emptyDirs:
+    if dirExists(dir):
+      removeDir(dir)
+      if log:
+        echo "remove ", dir
+
+proc main(directory=vrchatPictureDir, separateBy=date, version=false, verbose=false, stayEmptyDirectory=false, dryRun=false, separateTime="12:00") =
   if version:
     echo moduleVersion
     return
   let sepTime = parseSepTime(separateTime)
-  let (dirs, files) = detectDestinations(directory, separateBy, sepTime)
+  let (dirs, files, extraFiles) = detectDestinations(directory, separateBy, sepTime)
   if dryRun:
     if verbose:
       for file in files:
         logMoveFile(file)
+      if not stayEmptyDirectory:
+        let emptyDirs = detectEmptyDirectories(files, extraFiles)
+        for dir in emptyDirs:
+          echo "remove ", dir
   else:
     makeDirs(dirs)
     moveFiles(files, verbose)
+    if not stayEmptyDirectory:
+      let emptyDirs = detectEmptyDirectories(files, extraFiles)
+      removeEmptyDirectories(emptyDirs, verbose)
   echo files.len, " files moved"
 
 if isMainModule:
@@ -91,6 +130,7 @@ if isMainModule:
     "separateTime": "\"beginning of day\", in HH:mm format",
     "separateBy": "date / month / date_in_month",
     "dryRun": "do not move files, just print what would be done",
+    "stayEmptyDirectory": "do not delete empty directories",
   }, short={
     "separateTime": 't',
   })
