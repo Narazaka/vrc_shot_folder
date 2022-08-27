@@ -36,7 +36,13 @@ proc detectDestinations(directory: string, separateBy: SeparateBy, sepTime: Date
   for file in walkDirRec(directory, { pcFile, pcLinkToFile }, { pcDir, pcLinkToDir }):
     let matched = file.find(timeRe)
     if matched.isSome:
-      var datetime = parse(matched.get.match, "yyyy-MM-dd'_'HH-mm-ss'.'fff'.png'", local())
+      var datetime: DateTime
+      try:
+        datetime = parse(matched.get.match, "yyyy-MM-dd'_'HH-mm-ss'.'fff'.png'", local())
+      except TimeParseError:
+        stderr.writeLine("WARNING: [", file, "] is not yyyy-MM-dd_HH-mm-ss.fff format")
+        extraFiles.add(file)
+        continue
       if datetime.timeTick < sepTime.timeTick:
         datetime -= 1.days
       let useDate =
