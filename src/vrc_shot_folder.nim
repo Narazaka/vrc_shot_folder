@@ -1,6 +1,6 @@
 import os, times, nre, cligen, system
 
-let moduleVersion = "0.5.0"
+let moduleVersion = "0.6.0"
 
 let vrchatPictureDir = getHomeDir() / "Pictures" / "VRChat"
 
