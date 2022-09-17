@@ -14,7 +14,7 @@ proc parseSepTime(separateTime: string): DateTime =
     local()
   )
 
-let timeRe = re"(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})\.(\d+)\.png$"
+let timeRe = re"VRChat_.*(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.\d+).*\.png$"
 
 proc timeTick(datetime: DateTime): int64 =
   datetime.hour * 3600 + datetime.minute * 60 + datetime.second
@@ -38,7 +38,7 @@ proc detectDestinations(directory: string, separateBy: SeparateBy, sepTime: Date
     if matched.isSome:
       var datetime: DateTime
       try:
-        datetime = parse(matched.get.match, "yyyy-MM-dd'_'HH-mm-ss'.'fff'.png'", local())
+        datetime = parse(matched.get.captures[0], "yyyy-MM-dd'_'HH-mm-ss'.'fff", local())
       except TimeParseError:
         stderr.writeLine("WARNING: [", file, "] is not yyyy-MM-dd_HH-mm-ss.fff format")
         extraFiles.add(file)
