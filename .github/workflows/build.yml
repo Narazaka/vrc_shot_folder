@@ -1,0 +1,24 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install Nim
+      uses: iffy/install-nim@v4.1.3
+      with:
+        # 
+        version: 1.6.2
+      
+    - name: build
+      run: make
